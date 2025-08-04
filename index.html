@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mental Health Knowledge Check</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .question {
+      margin-bottom: 2rem;
+    }
+    .question p {
+      font-weight: bold;
+    }
+    .question label {
+      display: block;
+      margin: 0.5rem 0;
+    }
+    .correct {
+      background-color: #e0fbe0;
+      border-left: 6px solid #28a745;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .incorrect {
+      background-color: #ffe0e0;
+      border-left: 6px solid #dc3545;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .result {
+      font-weight: bold;
+      font-size: 1.2rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+    button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      background-color: #007bff;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      display: block;
+      margin: 2rem auto 0;
+    }
+    .icon {
+      font-weight: bold;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 Mental Health Knowledge Check</h1>
+  <form id="quizForm">
+    <div class="question" data-correct="c">
+      <p>1. What best defines mental health?</p>
+      <label><input type="radio" name="q1" value="a"> Just not having a mental illness</label>
+      <label><input type="radio" name="q1" value="b"> Always feeling happy</label>
+      <label><input type="radio" name="q1" value="c"> Thriving through stress, relationships, and life challenges</label>
+    </div>
+
+    <div class="question" data-correct="b">
+      <p>2. Which of these is a protective factor for mental health?</p>
+      <label><input type="radio" name="q2" value="a"> Economic inequality</label>
+      <label><input type="radio" name="q2" value="b"> Supportive relationships</label>
+      <label><input type="radio" name="q2" value="c"> Bullying and neglect</label>
+    </div>
+
+    <div class="question" data-correct="a">
+      <p>3. Which sector should NOT be involved in improving mental health?</p>
+      <label><input type="radio" name="q3" value="a"> Trick question: all sectors play a role</label>
+      <label><input type="radio" name="q3" value="b"> Only hospitals and clinics</label>
+      <label><input type="radio" name="q3" value="c"> Just schools and families</label>
+    </div>
+
+    <div class="question" data-correct="c">
+      <p>4. Which of the following is part of the WHO’s Mental Health Action Plan?</p>
+      <label><input type="radio" name="q4" value="a"> Focus only on medication</label>
+      <label><input type="radio" name="q4" value="b"> Close all mental health facilities</label>
+      <label><input type="radio" name="q4" value="c"> Strengthen affordable, accessible services</label>
+    </div>
+
+    <div class="question" data-correct="b">
+      <p>5. Mental health is:</p>
+      <label><input type="radio" name="q5" value="a"> A personal problem only</label>
+      <label><input type="radio" name="q5" value="b"> Everyone’s business—from home to policy</label>
+      <label><input type="radio" name="q5" value="c"> Something you either have or don’t</label>
+    </div>
+
+    <button type="button" onclick="submitQuiz()">Submit Answers</button>
+  </form>
+
+  <div id="results" class="result"></div>
+
+  <script>
+    const explanations = {
+      q1: "✅ Mental health means thriving—not just surviving. It includes handling stress, growing, and contributing.",
+      q2: "✅ Supportive relationships help build resilience and protect against mental health struggles.",
+      q3: "✅ It’s a trick question! Everyone—from governments to families—can help support mental well-being.",
+      q4: "✅ The WHO wants to make mental health services human-rights based, affordable, and accessible.",
+      q5: "✅ Mental health affects society as a whole. We all have a role to play in improving it."
+    };
+
+    function submitQuiz() {
+      let form = document.getElementById("quizForm");
+      let questions = form.querySelectorAll(".question");
+      let score = 0;
+
+      questions.forEach((q, idx) => {
+        let name = `q${idx + 1}`;
+        let selected = form.querySelector(`input[name="${name}"]:checked`);
+        let correct = q.getAttribute("data-correct");
+
+        let feedback = document.createElement("div");
+
+        if (selected) {
+          if (selected.value === correct) {
+            feedback.className = "correct";
+            feedback.innerHTML = `<span class="icon">✅</span>${explanations[name]}`;
+            score++;
+          } else {
+            feedback.className = "incorrect";
+            feedback.innerHTML = `<span class="icon">❌</span>${explanations[name]}`;
+          }
+        } else {
+          feedback.className = "incorrect";
+          feedback.innerHTML = `<span class="icon">❌</span>Please select an answer. ${explanations[name]}`;
+        }
+
+        // Remove old feedback if it exists
+        let oldFeedback = q.querySelector(".correct, .incorrect");
+        if (oldFeedback) oldFeedback.remove();
+
+        q.appendChild(feedback);
+      });
+
+      let total = questions.length;
+      let percent = Math.round((score / total) * 100);
+      document.getElementById("results").textContent = `You got ${score}/${total} correct (${percent}%)`;
+    }
+  </script>
+</body>
+</html>
